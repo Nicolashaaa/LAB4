@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
 void easy1(char s[],int n){
 int i;
  int k;
@@ -32,67 +30,62 @@ void easy3(char s[],int n){
 for (i=0;i<n;i++){
     if ((s[i]=='a') || (s[i]=='e') ||
         (s[i]=='i') || (s[i]=='o') ||
-         (s[i]=='u')){
+         (s[i]=='u')||(s[i]=='A') || (s[i]=='E') ||
+        (s[i]=='I') || (s[i]=='O') ||
+         (s[i]=='U')){
           k++;}
 
 }
 printf("The number of vowels: %d",k);}
-void easy4(char s[], int n){
-  int i; int k; k=1;
-  for (i=0;i<n;i++){
-    if (s[i]==' '){k++;}
-  }
-  printf("The number of words in it: %d",k);
-}
 void medium1(char s[]){
    int i; int k; k=0;
    int n=strlen(s)-1;
    for(i=0; i<n; i++){
-       if (!((s[i] >= 'a' && s[i] <= 'z') ||(s[i]==' ') ||(s[i] >= 'A' && s[i] <= 'Z'))){
-        k++;
+       if ((s[i]==',')||(s[i]=='.')||(s[i]=='?')||(s[i]=='!')||
+            (s[i]=='-')||(s[i]==':')||(s[i]==';')||(s[i]=='[')||
+             (s[i]==']')||(s[i]=='{')||(s[i]=='}')||(s[i]=='(')||
+              (s[i]==')')||(s[i]=='\'')||(s[i]=='\"')){
+                  if ((s[i]=='.')&&(s[i+1]=='.')&&(s[i+2]=='.')){k++; i=i+3;}else{ k++;}
        }
    }
    printf("The number of the punctuation marks: %d\n",k);
      }
-void medium2(char s[]){
-    int i; int n=strlen(s)-1; int k; k=0;
-     if ((strchr(s,'@')!=NULL)&&(strchr(s,'.')!=NULL)){
-             if (strchr(s,'@')<strchr(s,'.')){
-                      for(i=0; i<n; i++){if((s[i] >= 'a' && s[i] <= 'z') ||(s[i]=='@')||(s[i]=='.')){k=1;}
-                                               else{k=0; break;} }
-                                                           }
-                                }
-    if(k){printf("The email address is written correctly!\n");} else{printf("The email address isn't written correctly!\n");}
-      }
-int compare(const void *a, const void *b) {
-    return strcmp(*(const char**)a, *(const char**)b);
-}
-void medium3(char s[]){
-    int count=0;
-    char *words[100];
-int n=strlen(s)-1;int i;
-char fr[100];
-strcpy(fr,s);
-fr[n]='\0';
-char *token = strtok(fr, " ");
-    while (token != NULL && count<100) {
-        words[count++] = token;
-        token = strtok(NULL, " ");
-    }
-qsort(words, count, sizeof(char*), compare);
-printf("Sorted Sentence: \n");
-    for (i = 0; i < count; i++) {
-        printf("%s ", words[i]);
 
+void basetask(char s[]){
+    int i;
+    char smallest[1000]; int wordlenght= 1000;
+    char currentWord[1000];
+    int currentLength = 0;
+int n=strlen(s);
+    for (i = 0; i<n; i++) {
+        char currentChar = s[i];
+
+        if (((currentChar>='a')&&(currentChar<='z'))||((currentChar>='A')&&(currentChar<='Z'))) {
+            currentWord[currentLength] = currentChar;
+            currentLength++;
+        } else { if (currentLength > 0 && currentLength < wordlenght) {
+                currentWord[currentLength] = '\0';
+                strcpy(smallest, currentWord);
+                wordlenght = currentLength;
+            }
+            currentLength = 0;
+        } }
+
+    if (wordlenght < 1000) {
+        printf("smallest word: %s\n", smallest);
+    } else {
+        printf("The string doesn't have words\n");
     }
-}
+
+    return 0;
+
+  }
 
 int main()
 {
     char s[100];
     char med1[100];
-    char med2[100];
-    char med3[100];
+    char basestring[100];
     printf("write a word for easy tasks, or sentence: ");
     fgets(s,sizeof(s),stdin);
     int n=strlen(s)-1;
@@ -100,18 +93,12 @@ int main()
     printf("\n");
     easy2(s,n);
     printf("\n");
-    easy3(s,n);
-    printf("\n");
-    easy4(s,n);
-    printf("\n");
     printf("Write a sentence to count the number of punctuation marks in it: ");
     fgets(med1,sizeof(med1),stdin);
     medium1(med1);
-    printf("Write an email address: ");
-    fgets(med2,sizeof(med2),stdin);
-    medium2(med2);
-    printf("Write a sentence: ");
-    fgets(med3,sizeof(med3),stdin);
-    medium3(med3);
+    printf("Write a sentence for basetask: ");
+    fgets(basestring,sizeof(basestring),stdin);
+    basetask(basestring);
+
     return 0;
 }
